@@ -1,0 +1,708 @@
+[
+  {
+    "id": "16",
+    "deadline": "2026-01-13",
+    "projectName": "인천계양 A-10BL 아파트 전기공사 4공구 [협정]",
+    "noticeNumber": "2504148-00",
+    "representative": "(주)유신전력",
+    "client": "한국토지주택공사",
+    "location": "전국/인천",
+    "amount": "11166203000",
+    "status": "completed",
+    "members": [
+      {
+        "name": "(주)유신전력",
+        "id": "5018117997",
+        "share": "0.51",
+        "role": "representative",
+        "contact": ""
+      },
+      {
+        "name": "(주)우일엔지니어링",
+        "id": "1318115859",
+        "share": "0.49",
+        "role": "member",
+        "contact": "우일엔지니어링인천전기"
+      }
+    ]
+  },
+  {
+    "id": "17",
+    "deadline": "2026-01-13",
+    "projectName": "인천계양 A-10BL 아파트 전기공사 4공구 [협정]",
+    "noticeNumber": "2504148-00",
+    "representative": "대웅기전(주)",
+    "client": "한국토지주택공사",
+    "location": "전국/인천",
+    "amount": "11166203000",
+    "status": "completed",
+    "members": [
+      {
+        "name": "대웅기전(주)",
+        "id": "5068176254",
+        "share": "0.51",
+        "role": "representative",
+        "contact": "대웅기전경북전기"
+      },
+      {
+        "name": "서부전력(주)",
+        "id": "1378143649",
+        "share": "0.49",
+        "role": "member",
+        "contact": ""
+      }
+    ]
+  },
+  {
+    "id": "18",
+    "deadline": "2026-02-02",
+    "projectName": "[협정]송산그린시티 국제테마파크 주거단지 Smart City 정보통신공사",
+    "noticeNumber": "B3202508204",
+    "representative": "(주)데이타렉스",
+    "client": "한국수자원공사재무관리처",
+    "location": "전국/경기",
+    "amount": "6362000000",
+    "status": "ongoing",
+    "members": [
+      {
+        "name": "(주)데이타렉스",
+        "id": "2208660663",
+        "share": "0.5",
+        "role": "representative",
+        "contact": ""
+      },
+      {
+        "name": "(주)에스오에이텔레콤",
+        "id": "1298157900",
+        "share": "0.2",
+        "role": "member",
+        "contact": "박기열"
+      },
+      {
+        "name": "(주)에스지엠",
+        "id": "7238800120",
+        "share": "0.1",
+        "role": "member",
+        "contact": "김준영"
+      },
+      {
+        "name": "(주)엔케이정보통신",
+        "id": "3018188188",
+        "share": "0.2",
+        "role": "member",
+        "contact": ""
+      }
+    ]
+  },
+  {
+    "id": "19",
+    "deadline": "2026-02-02",
+    "projectName": "[협정]송산그린시티 국제테마파크 주거단지 Smart City 정보통신공사",
+    "noticeNumber": "B3202508204",
+    "representative": "(주)다래파크텍",
+    "client": "한국수자원공사재무관리처",
+    "location": "전국/경기",
+    "amount": "6362000000",
+    "status": "ongoing",
+    "members": [
+      {
+        "name": "(주)다래파크텍",
+        "id": "2118199266",
+        "share": "0.4",
+        "role": "representative",
+        "contact": "김민욱 과장 다래파크텍"
+      },
+      {
+        "name": "(주)송림전기",
+        "id": "6138175776",
+        "share": "0.3",
+        "role": "member",
+        "contact": "김준영"
+      },
+      {
+        "name": "(주)윤씨네",
+        "id": "1348173450",
+        "share": "0.3",
+        "role": "member",
+        "contact": ""
+      }
+    ]
+  },
+  {
+    "id": "20",
+    "deadline": "2026-02-02",
+    "projectName": "[협정]송산그린시티 국제테마파크 주거단지 Smart City 정보통신공사",
+    "noticeNumber": "B3202508204",
+    "representative": "한주통신(주)",
+    "client": "한국수자원공사재무관리처",
+    "location": "전국/경기",
+    "amount": "6362000000",
+    "status": "ongoing",
+    "members": [
+      {
+        "name": "한주통신(주)",
+        "id": "4138104614",
+        "share": "0.51",
+        "role": "representative",
+        "contact": "한주통신 광주 통신"
+      },
+      {
+        "name": "해광전기(주)",
+        "id": "1308663203",
+        "share": "0.21",
+        "role": "member",
+        "contact": "송세광"
+      },
+      {
+        "name": "(주)아이티엠에스",
+        "id": "5118800681",
+        "share": "0.28",
+        "role": "member",
+        "contact": ""
+      }
+    ]
+  },
+  {
+    "id": "21",
+    "deadline": "2026-02-02",
+    "projectName": "[협정]송산그린시티 국제테마파크 주거단지 Smart City 정보통신공사",
+    "noticeNumber": "B3202508204",
+    "representative": "(주)조은정보",
+    "client": "한국수자원공사재무관리처",
+    "location": "전국/경기",
+    "amount": "6362000000",
+    "status": "ongoing",
+    "members": [
+      {
+        "name": "(주)조은정보",
+        "id": "2178135988",
+        "share": "0.51",
+        "role": "representative",
+        "contact": "박기열"
+      },
+      {
+        "name": "(주)카프",
+        "id": "2148740164",
+        "share": "0.49",
+        "role": "member",
+        "contact": "김준영"
+      }
+    ]
+  },
+  {
+    "id": "7",
+    "deadline": "2026-02-22",
+    "projectName": "시흥거모 스마트도시 정보통신공사 [협정]",
+    "noticeNumber": "2600080-00",
+    "representative": "동서이엔씨㈜",
+    "client": "경기남부지역본부",
+    "location": "전국/경기",
+    "amount": "7735838000",
+    "status": "ongoing",
+    "members": [
+      {
+        "name": "동서이엔씨㈜",
+        "id": "1378618335",
+        "share": "0.51",
+        "role": "representative",
+        "contact": "김준영"
+      },
+      {
+        "name": "아이클라우드(주)",
+        "id": "5238701823",
+        "share": "0.49",
+        "role": "member",
+        "contact": "박기열"
+      }
+    ]
+  },
+  {
+    "id": "8",
+    "deadline": "2026-02-22",
+    "projectName": "시흥거모 스마트도시 정보통신공사 [협정]",
+    "noticeNumber": "2600080-00",
+    "representative": "한주통신(주)",
+    "client": "경기남부지역본부",
+    "location": "전국/경기",
+    "amount": "7735838000",
+    "status": "ongoing",
+    "members": [
+      {
+        "name": "한주통신(주)",
+        "id": "4138104614",
+        "share": "0.5",
+        "role": "representative",
+        "contact": "한주통신 광주 통신"
+      },
+      {
+        "name": "(유)은혜전기",
+        "id": "4158111085",
+        "share": "0.16",
+        "role": "member",
+        "contact": "김준영"
+      },
+      {
+        "name": "이노인포컴",
+        "id": "4581900180",
+        "share": "0.16",
+        "role": "member",
+        "contact": "김준영"
+      },
+      {
+        "name": "수도전기(주)",
+        "id": "1288115659",
+        "share": "0.18",
+        "role": "member",
+        "contact": "김준영"
+      }
+    ]
+  },
+  {
+    "id": "9",
+    "deadline": "2026-02-22",
+    "projectName": "시흥거모 스마트도시 정보통신공사 [협정]",
+    "noticeNumber": "2600080-00",
+    "representative": "(주)조은정보",
+    "client": "경기남부지역본부",
+    "location": "전국/경기",
+    "amount": "7735838000",
+    "status": "ongoing",
+    "members": [
+      {
+        "name": "(주)조은정보",
+        "id": "2178135988",
+        "share": "0.55",
+        "role": "representative",
+        "contact": "박기열"
+      },
+      {
+        "name": "해광전기(주)",
+        "id": "1308663203",
+        "share": "0.13",
+        "role": "member",
+        "contact": "송세광"
+      },
+      {
+        "name": "(주)극동이앤씨",
+        "id": "5518802256",
+        "share": "0.18",
+        "role": "member",
+        "contact": "공수인"
+      },
+      {
+        "name": "(주)씨앤씨전력",
+        "id": "1288147108",
+        "share": "0.14",
+        "role": "member",
+        "contact": "김준영"
+      }
+    ]
+  },
+  {
+    "id": "10",
+    "deadline": "2026-02-22",
+    "projectName": "시흥거모 스마트도시 정보통신공사 [협정]",
+    "noticeNumber": "2600080-00",
+    "representative": "(주)대운전설",
+    "client": "경기남부지역본부",
+    "location": "전국/경기",
+    "amount": "7735838000",
+    "status": "ongoing",
+    "members": [
+      {
+        "name": "(주)대운전설",
+        "id": "1288166463",
+        "share": "0.51",
+        "role": "representative",
+        "contact": "김준영"
+      },
+      {
+        "name": "대신엔에스(주)",
+        "id": "2048137258",
+        "share": "0.49",
+        "role": "member",
+        "contact": "대신엔에스여직원"
+      }
+    ]
+  },
+  {
+    "id": "11",
+    "deadline": "2026-02-22",
+    "projectName": "시흥거모 스마트도시 정보통신공사 [협정]",
+    "noticeNumber": "2600080-00",
+    "representative": "키엔컴(주)",
+    "client": "경기남부지역본부",
+    "location": "전국/경기",
+    "amount": "7735838000",
+    "status": "ongoing",
+    "members": [
+      {
+        "name": "키엔컴(주)",
+        "id": "2098134713",
+        "share": "0.6",
+        "role": "representative",
+        "contact": "키엔컴서울통신"
+      },
+      {
+        "name": "(주)맥스이엔씨",
+        "id": "1238615208",
+        "share": "0.4",
+        "role": "member",
+        "contact": ""
+      }
+    ]
+  },
+  {
+    "id": "12",
+    "deadline": "2026-02-22",
+    "projectName": "[협정]고양창릉(1공구) 스마트도시 정보통신공사",
+    "noticeNumber": "2600021-00",
+    "representative": "(주)큐브정보기술",
+    "client": "한국토지주택공사 경기북부지역본부",
+    "location": "전국/경기",
+    "amount": "7797691000",
+    "status": "ongoing",
+    "members": [
+      {
+        "name": "(주)큐브정보기술",
+        "id": "1278631549",
+        "share": "0.51",
+        "role": "representative",
+        "contact": ""
+      },
+      {
+        "name": "(주)조은정보",
+        "id": "2178135988",
+        "share": "0.49",
+        "role": "member",
+        "contact": "박기열"
+      }
+    ]
+  },
+  {
+    "id": "13",
+    "deadline": "2026-02-22",
+    "projectName": "[협정]고양창릉(1공구) 스마트도시 정보통신공사",
+    "noticeNumber": "2600021-00",
+    "representative": "아이클라우드(주)",
+    "client": "한국토지주택공사 경기북부지역본부",
+    "location": "전국/경기",
+    "amount": "7797691000",
+    "status": "ongoing",
+    "members": [
+      {
+        "name": "아이클라우드(주)",
+        "id": "5238701823",
+        "share": "0.6",
+        "role": "representative",
+        "contact": "박기열"
+      },
+      {
+        "name": "해광전기(주)",
+        "id": "1308663203",
+        "share": "0.12",
+        "role": "member",
+        "contact": "송세광"
+      },
+      {
+        "name": "(주)씨앤씨전력",
+        "id": "1288147108",
+        "share": "0.13",
+        "role": "member",
+        "contact": "김준영"
+      },
+      {
+        "name": "(주)극동이앤씨",
+        "id": "5518802256",
+        "share": "0.15",
+        "role": "member",
+        "contact": "공수인"
+      }
+    ]
+  },
+  {
+    "id": "14",
+    "deadline": "2026-02-22",
+    "projectName": "[협정]고양창릉(1공구) 스마트도시 정보통신공사",
+    "noticeNumber": "2600021-00",
+    "representative": "(주)대운전설",
+    "client": "한국토지주택공사 경기북부지역본부",
+    "location": "전국/경기",
+    "amount": "7797691000",
+    "status": "ongoing",
+    "members": [
+      {
+        "name": "(주)대운전설",
+        "id": "1288166463",
+        "share": "0.51",
+        "role": "representative",
+        "contact": "김준영"
+      },
+      {
+        "name": "대신엔에스(주)",
+        "id": "2048137258",
+        "share": "0.49",
+        "role": "member",
+        "contact": "대신엔에스여직원"
+      }
+    ]
+  },
+  {
+    "id": "15",
+    "deadline": "2026-02-22",
+    "projectName": "[협정]고양창릉(1공구) 스마트도시 정보통신공사",
+    "noticeNumber": "2600021-00",
+    "representative": "한주통신(주)",
+    "client": "한국토지주택공사 경기북부지역본부",
+    "location": "전국/경기",
+    "amount": "7797691000",
+    "status": "ongoing",
+    "members": [
+      {
+        "name": "한주통신(주)",
+        "id": "4138104614",
+        "share": "0.6",
+        "role": "representative",
+        "contact": "한주통신 광주 통신"
+      },
+      {
+        "name": "(유)은혜전기",
+        "id": "4158111085",
+        "share": "0.1",
+        "role": "member",
+        "contact": "김준영"
+      },
+      {
+        "name": "이노인포컴",
+        "id": "4581900180",
+        "share": "0.15",
+        "role": "member",
+        "contact": "김준영"
+      },
+      {
+        "name": "수도전기(주)",
+        "id": "1288115659",
+        "share": "0.15",
+        "role": "member",
+        "contact": "김준영"
+      }
+    ]
+  },
+  {
+    "id": "0",
+    "deadline": "2026-02-23",
+    "projectName": "[협정]과천지식정보타운역 통신설비 신설 기타공사",
+    "noticeNumber": "2026-01-000006-00",
+    "representative": "유비텔레콤(주)",
+    "client": "국가철도공단",
+    "location": "전국/경기",
+    "amount": "5429894000",
+    "status": "ongoing",
+    "members": [
+      {
+        "name": "유비텔레콤(주)",
+        "id": "2248130166",
+        "share": "0.7",
+        "role": "representative",
+        "contact": ""
+      },
+      {
+        "name": "(주)카프",
+        "id": "2148740164",
+        "share": "0.3",
+        "role": "member",
+        "contact": "김준영"
+      }
+    ]
+  },
+  {
+    "id": "1",
+    "deadline": "2026-02-23",
+    "projectName": "[협정]과천지식정보타운역 통신설비 신설 기타공사",
+    "noticeNumber": "2026-01-000006-00",
+    "representative": "(주)혁신전공사",
+    "client": "국가철도공단",
+    "location": "전국/경기",
+    "amount": "5429894000",
+    "status": "ongoing",
+    "members": [
+      {
+        "name": "(주)혁신전공사",
+        "id": "2038101742",
+        "share": "0.4",
+        "role": "representative",
+        "contact": ""
+      },
+      {
+        "name": "(주)에스오에이텔레콤",
+        "id": "1298157900",
+        "share": "0.3",
+        "role": "member",
+        "contact": "박기열"
+      },
+      {
+        "name": "이엔엠솔루션",
+        "id": "5538101730",
+        "share": "0.3",
+        "role": "member",
+        "contact": ""
+      }
+    ]
+  },
+  {
+    "id": "2",
+    "deadline": "2026-02-23",
+    "projectName": "[협정]과천지식정보타운역 통신설비 신설 기타공사",
+    "noticeNumber": "2026-01-000006-00",
+    "representative": "(주)대운전설",
+    "client": "국가철도공단",
+    "location": "전국/경기",
+    "amount": "5429894000",
+    "status": "ongoing",
+    "members": [
+      {
+        "name": "(주)대운전설",
+        "id": "1288166463",
+        "share": "0.51",
+        "role": "representative",
+        "contact": "김준영"
+      },
+      {
+        "name": "아이클라우드(주)",
+        "id": "5238701823",
+        "share": "0.49",
+        "role": "member",
+        "contact": "박기열"
+      }
+    ]
+  },
+  {
+    "id": "3",
+    "deadline": "2026-02-23",
+    "projectName": "[협정]과천지식정보타운역 통신설비 신설 기타공사",
+    "noticeNumber": "2026-01-000006-00",
+    "representative": "(주)조은정보",
+    "client": "국가철도공단",
+    "location": "전국/경기",
+    "amount": "5429894000",
+    "status": "ongoing",
+    "members": [
+      {
+        "name": "(주)조은정보",
+        "id": "2178135988",
+        "share": "0.5",
+        "role": "representative",
+        "contact": "박기열"
+      },
+      {
+        "name": "이노인포컴",
+        "id": "4581900180",
+        "share": "0.3",
+        "role": "member",
+        "contact": "김준영"
+      },
+      {
+        "name": "(주)데이타렉스",
+        "id": "2208660663",
+        "share": "0.2",
+        "role": "member",
+        "contact": ""
+      }
+    ]
+  },
+  {
+    "id": "4",
+    "deadline": "2026-02-23",
+    "projectName": "[협정]과천지식정보타운역 통신설비 신설 기타공사",
+    "noticeNumber": "2026-01-000006-00",
+    "representative": "대신엔에스(주)",
+    "client": "국가철도공단",
+    "location": "전국/경기",
+    "amount": "5429894000",
+    "status": "ongoing",
+    "members": [
+      {
+        "name": "대신엔에스(주)",
+        "id": "2048137258",
+        "share": "0.5",
+        "role": "representative",
+        "contact": "대신엔에스여직원"
+      },
+      {
+        "name": "수도전기(주)",
+        "id": "1288115659",
+        "share": "0.3",
+        "role": "member",
+        "contact": "김준영"
+      },
+      {
+        "name": "(주)태양이엔씨",
+        "id": "1408601257",
+        "share": "0.2",
+        "role": "member",
+        "contact": "김준영"
+      }
+    ]
+  },
+  {
+    "id": "5",
+    "deadline": "2026-02-23",
+    "projectName": "[협정]과천지식정보타운역 통신설비 신설 기타공사",
+    "noticeNumber": "2026-01-000006-00",
+    "representative": "한주통신(주)",
+    "client": "국가철도공단",
+    "location": "전국/경기",
+    "amount": "5429894000",
+    "status": "ongoing",
+    "members": [
+      {
+        "name": "한주통신(주)",
+        "id": "4138104614",
+        "share": "0.5",
+        "role": "representative",
+        "contact": "한주통신 광주 통신"
+      },
+      {
+        "name": "(주)극동이앤씨",
+        "id": "5518802256",
+        "share": "0.3",
+        "role": "member",
+        "contact": "공수인"
+      },
+      {
+        "name": "(주)서광",
+        "id": "3108104222",
+        "share": "0.2",
+        "role": "member",
+        "contact": "김준영"
+      }
+    ]
+  },
+  {
+    "id": "6",
+    "deadline": "2026-02-23",
+    "projectName": "[협정]과천지식정보타운역 통신설비 신설 기타공사",
+    "noticeNumber": "2026-01-000006-00",
+    "representative": "키엔컴(주)",
+    "client": "국가철도공단",
+    "location": "전국/경기",
+    "amount": "5429894000",
+    "status": "ongoing",
+    "members": [
+      {
+        "name": "키엔컴(주)",
+        "id": "2098134713",
+        "share": "0.7",
+        "role": "representative",
+        "contact": "키엔컴서울통신"
+      },
+      {
+        "name": "(주)씨앤씨전력",
+        "id": "1288147108",
+        "share": "0.3",
+        "role": "member",
+        "contact": "김준영"
+      }
+    ]
+  }
+]
