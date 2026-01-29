@@ -9,7 +9,7 @@ import { ListView } from './components/ListView';
 import { LoginPage } from './components/LoginPage';
 import { SettingsModal } from './components/SettingsModal';
 import { AccountSettingsModal } from './components/AccountSettingsModal';
-import { parseExcelFile, parseBidNoticeExcel } from './utils/excelService';
+
 import { fetchBiddingData, fetchAndDownloadRawData } from './utils/apiService';
 import dbData from './db.json';
 
@@ -105,42 +105,7 @@ function Dashboard() {
         else if (newView === 'list') navigate('/list');
     };
 
-    const handleExcelUpload = async (file) => {
-        if (!file) return;
-        setIsRefreshing(true);
-        try {
-            // Try parsing as Agreement Status Excel (Priority)
-            let parsedProjects = await parseExcelFile(file);
 
-            if (parsedProjects.length === 0) {
-                // If empty, try as Bid Notice Excel
-                console.log("Empty result from Agreement parser, trying Notice parser...");
-                parsedProjects = await parseBidNoticeExcel(file);
-            }
-
-            if (parsedProjects.length > 0) {
-                // Ensure sharedWith is set for visibility
-                const accessibleProjects = parsedProjects.map(p => ({
-                    ...p,
-                    sharedWith: currentUser ? [
-                        currentUser.name,
-                        currentUser.username,
-                        ...(currentUser.aliases || [])
-                    ] : []
-                }));
-
-                setProjects(accessibleProjects);
-                alert(`${accessibleProjects.length}개의 프로젝트를 불러왔습니다.`);
-            } else {
-                alert("엑셀 파일에서 유효한 데이터를 찾을 수 없습니다. (형식을 확인해주세요)");
-            }
-        } catch (e) {
-            console.error("Upload failed", e);
-            alert("파일 처리 중 오류가 발생했습니다: " + e.message);
-        } finally {
-            setIsRefreshing(false);
-        }
-    };
 
     const handleRefresh = async () => {
         setIsRefreshing(true);
@@ -207,6 +172,7 @@ function Dashboard() {
     const handleLogin = (user) => {
         setCurrentUser(user);
         localStorage.setItem('jv-user', JSON.stringify(user));
+        setCurrentDate(new Date());
     };
 
     const handleLogout = () => {
@@ -267,7 +233,7 @@ function Dashboard() {
         <div className="flex flex-col h-full overflow-hidden">
             <Header
                 onRefresh={handleRefresh}
-                onUpload={handleExcelUpload}
+
                 onOpenSettings={() => setIsSettingsOpen(true)}
                 onOpenAccountSettings={() => setIsAccountSettingsOpen(true)}
                 isRefreshing={isRefreshing}
