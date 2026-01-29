@@ -223,8 +223,8 @@ export const SidebarDetails = ({ project, siblings = [], onClose }) => {
                                 </thead>
                                 <tbody className="divide-y divide-[#e7ebf3]">
                                     {selectedProposal.members.map((member, idx) => {
-                                        let formattedId = member.id;
-                                        const cleanId = member.id.replace(/[^0-9]/g, '');
+                                        let formattedId = member.id || '';
+                                        const cleanId = formattedId.replace(/[^0-9]/g, '');
                                         if (cleanId.length === 10) {
                                             formattedId = `${cleanId.slice(0, 3)}-${cleanId.slice(3, 5)}-${cleanId.slice(5)}`;
                                         }
