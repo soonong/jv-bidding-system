@@ -35,15 +35,43 @@ const IS_DEV = import.meta.env.DEV;
 const RAW_BID_API = 'https://bidding2.kr/api2/module/consortiumAPI/bidData_get.php?moduleKey=happy304';
 const RAW_AGREE_API = 'https://file.bidding2.kr/api/ContractMaster/getGongListForSoon.php?moduleKey=happy304';
 
-// In Dev: Use Vite Proxy
-// In Prod: Use public CORS proxies (CodeTabs) as PHP is not supported
-const BID_API_URL = IS_DEV
-    ? '/api/bidding/api2/module/consortiumAPI/bidData_get.php?moduleKey=happy304'
-    : `https://api.codetabs.com/v1/proxy?quest=${encodeURIComponent(RAW_BID_API)}`;
+// Helper to fetch with failover proxies (Production only)
+// Tries multiple high-quality CORS proxies to ensure success
+// Helper to fetch with failover proxies (Production only)
+// Tries multiple high-quality CORS proxies to ensure success
+const fetchWithFailover = async (rawUrl: string) => {
+    if (IS_DEV) {
+        // Dev: Route to Vite proxy based on URL content
+        if (rawUrl.includes('bidData')) return axios.get('/api/bidding/api2/module/consortiumAPI/bidData_get.php?moduleKey=happy304');
+        return axios.get('/api/file/api/ContractMaster/getGongListForSoon.php?moduleKey=happy304');
+    }
 
-const AGREEMENT_API_URL = IS_DEV
-    ? '/api/file/api/ContractMaster/getGongListForSoon.php?moduleKey=happy304'
-    : `https://api.codetabs.com/v1/proxy?quest=${encodeURIComponent(RAW_AGREE_API)}`;
+    // Prod: Try sequentially
+    const proxies = [
+        // 1. AllOrigins (Most common)
+        (u: string) => `https://api.allorigins.win/raw?url=${encodeURIComponent(u)}`,
+        // 2. CodeTabs
+        (u: string) => `https://api.codetabs.com/v1/proxy?quest=${encodeURIComponent(u)}`,
+        // 3. CorsProxy.io (Sometimes works)
+        (u: string) => `https://corsproxy.io/?${encodeURIComponent(u)}`,
+        // 4. Cors.lol (Another option)
+        (u: string) => `https://api.cors.lol/?url=${encodeURIComponent(u)}`
+    ];
+
+    let lastError;
+    for (const p of proxies) {
+        try {
+            const proxyUrl = p(rawUrl);
+            // Increased timeout to 30s as target API is slow
+            const res = await axios.get(proxyUrl, { timeout: 30000 });
+            if (res.status === 200) return res;
+        } catch (e: any) {
+            console.warn(`Proxy attempt failed:`, e.message);
+            lastError = e;
+        }
+    }
+    throw lastError || new Error("All proxies failed after multiple attempts.");
+};
 
 // Internal Types
 interface ApiBidData {
@@ -104,12 +132,31 @@ export const fetchBiddingData = async (): Promise<BidProject[]> => {
         console.log("Fetching API Data...");
 
         const [bidRes, agreeRes] = await Promise.all([
-            axios.get(BID_API_URL),
-            axios.get(AGREEMENT_API_URL)
+            fetchWithFailover(RAW_BID_API),
+            fetchWithFailover(RAW_AGREE_API)
         ]);
 
-        const rawBids: ApiBidData[] = bidRes.data;
-        const rawAgreements: ApiAgreementData[] = agreeRes.data;
+        let rawBids: any = bidRes.data;
+        let rawAgreements: any = agreeRes.data;
+
+        // Unwrap AllOrigins response if present
+        if (rawBids && rawBids.contents) {
+            try {
+                const parsed = typeof rawBids.contents === 'string' ? JSON.parse(rawBids.contents) : rawBids.contents;
+                rawBids = parsed;
+            } catch (e) {
+                console.warn("Failed to parse AllOrigins bid contents", e);
+            }
+        }
+
+        if (rawAgreements && rawAgreements.contents) {
+            try {
+                const parsed = typeof rawAgreements.contents === 'string' ? JSON.parse(rawAgreements.contents) : rawAgreements.contents;
+                rawAgreements = parsed;
+            } catch (e) {
+                console.warn("Failed to parse AllOrigins agreement contents", e);
+            }
+        }
 
         console.log("Raw Bids:", rawBids);
         console.log("Raw Agreements:", rawAgreements);
@@ -242,17 +289,32 @@ export const fetchBiddingData = async (): Promise<BidProject[]> => {
 export const fetchAndDownloadRawData = async () => {
     try {
         console.log("Downloading Raw API Data for Debugging...");
-        const [bidRes, agreeRes] = await Promise.all([
-            axios.get(BID_API_URL),
-            axios.get(AGREEMENT_API_URL)
-        ]);
+
+        // Use separate try-catch for individual requests via helper
+        const fetchSafe = async (url: string, label: string) => {
+            try {
+                const res = await fetchWithFailover(url);
+                return { success: true, status: res.status, data: res.data };
+            } catch (err: any) {
+                console.error(`Failed to fetch ${label}:`, err);
+                return {
+                    success: false,
+                    status: err.response?.status || 0,
+                    error: err.response?.data || err.message,
+                    headers: err.response?.headers
+                };
+            }
+        };
+
+        const bidRes = await fetchSafe(RAW_BID_API, "Bid Data");
+        const agreeRes = await fetchSafe(RAW_AGREE_API, "Agreement Data");
 
         const debugData = {
             timestamp: new Date().toISOString(),
-            bidApiUrl: BID_API_URL,
-            agreementApiUrl: AGREEMENT_API_URL,
-            bidData: bidRes.data,
-            agreementData: agreeRes.data
+            bidApiUrl: RAW_BID_API,
+            agreementApiUrl: RAW_AGREE_API,
+            bidData: bidRes,
+            agreementData: agreeRes
         };
 
         const blob = new Blob([JSON.stringify(debugData, null, 2)], { type: "application/json" });

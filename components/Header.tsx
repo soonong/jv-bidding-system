@@ -4,6 +4,7 @@ import { User } from '../App';
 
 interface HeaderProps {
     onRefresh: () => void;
+    onUpload: (file: File) => void;
     onOpenSettings: () => void;
     onOpenAccountSettings: () => void;
     isRefreshing: boolean;
@@ -12,8 +13,21 @@ interface HeaderProps {
     onLogout: () => void;
 }
 
-export const Header: React.FC<HeaderProps> = ({ onRefresh, onOpenSettings, onOpenAccountSettings, isRefreshing, currentUser, onLogin, onLogout }) => {
+export const Header: React.FC<HeaderProps> = ({ onRefresh, onUpload, onOpenSettings, onOpenAccountSettings, isRefreshing, currentUser, onLogin, onLogout }) => {
     const [showProfileMenu, setShowProfileMenu] = useState(false);
+    const fileInputRef = useRef<HTMLInputElement>(null);
+
+    const handleUploadClick = () => {
+        fileInputRef.current?.click();
+    };
+
+    const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+        const file = event.target.files?.[0];
+        if (file) {
+            onUpload(file);
+        }
+        event.target.value = '';
+    };
 
     return (
         <header className="flex items-center justify-between whitespace-nowrap border-b border-solid border-[#e7ebf3] bg-bg-surface px-6 py-3 shrink-0 z-50">
@@ -27,14 +41,32 @@ export const Header: React.FC<HeaderProps> = ({ onRefresh, onOpenSettings, onOpe
             <div className="flex flex-1 justify-end items-center gap-6">
                 {/* Actions */}
                 <div className="flex items-center gap-3">
+                    <input
+                        type="file"
+                        ref={fileInputRef}
+                        onChange={handleFileChange}
+                        className="hidden"
+                        accept=".xlsx, .xls"
+                    />
+
+                    <button
+                        onClick={handleUploadClick}
+                        disabled={isRefreshing}
+                        className="flex items-center gap-2 h-9 px-4 bg-green-600 text-white rounded-lg border border-green-600 text-sm font-bold hover:bg-green-700 transition-colors disabled:opacity-50 shadow-sm"
+                    >
+                        <span className="material-symbols-outlined text-[20px]">upload_file</span>
+                        <span className="hidden sm:inline">엑셀 업로드</span>
+                    </button>
+
                     <button
                         onClick={onRefresh}
                         disabled={isRefreshing}
-                        className="flex items-center gap-2 h-9 px-4 bg-primary text-white rounded-lg border border-primary text-sm font-bold hover:bg-blue-700 transition-colors disabled:opacity-50 shadow-sm"
+                        className="flex items-center gap-2 h-9 px-4 bg-white text-primary rounded-lg border border-primary text-sm font-bold hover:bg-blue-50 transition-colors disabled:opacity-50 shadow-sm"
                     >
                         <span className={`material-symbols-outlined text-[20px] ${isRefreshing ? 'animate-spin' : ''}`}>refresh</span>
-                        <span className="hidden sm:inline">{isRefreshing ? '업데이트 중...' : '새로고침'}</span>
+                        <span className="hidden sm:inline">{isRefreshing ? '업데이트 중...' : 'API 동기화'}</span>
                     </button>
+
 
 
                     <div className="w-px h-6 bg-gray-200 mx-1"></div>
