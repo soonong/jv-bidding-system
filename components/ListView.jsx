@@ -1,13 +1,7 @@
-import React from 'react';
-import { BidProject } from '../types';
 
-interface ListViewProps {
-    projects: BidProject[];
-    onSelectProject: (project: BidProject) => void;
-    selectedProjectId?: string;
-}
+import React, { useMemo } from 'react';
 
-export const ListView: React.FC<ListViewProps> = ({
+export const ListView = ({
     projects,
     onSelectProject,
     selectedProjectId
@@ -29,13 +23,13 @@ export const ListView: React.FC<ListViewProps> = ({
     });
 
     // Grouping / Deduplication
-    const uniqueProjects = React.useMemo(() => {
-        const groups = new Map<string, BidProject[]>();
+    const uniqueProjects = useMemo(() => {
+        const groups = new Map();
         upcomingProjects.forEach(p => {
             // Group by Notice Number if available, otherwise Project Name + Date
             const key = p.noticeNumber ? p.noticeNumber : `${p.projectName}_${p.parsedDate?.getTime()}`;
             if (!groups.has(key)) groups.set(key, []);
-            groups.get(key)!.push(p);
+            groups.get(key).push(p);
         });
 
         return Array.from(groups.values()).map(group => {
@@ -76,14 +70,14 @@ export const ListView: React.FC<ListViewProps> = ({
                             </tr>
                         </thead>
                         <tbody className="divide-y divide-[#e7ebf3]">
-                            {uniqueProjects.map((project: any) => {
+                            {uniqueProjects.map((project) => {
                                 const date = project.parsedDate || new Date();
                                 const isSelected = selectedProjectId === project.id;
                                 const count = project._count || 1;
 
                                 // Status logic
-                                const allGreen = project.members.length > 0 && project.members.every((m: any) => m.submissionStatus === 'o');
-                                const hasRed = project.members.some((m: any) => m.submissionStatus === 'x');
+                                const allGreen = project.members.length > 0 && project.members.every((m) => m.submissionStatus === 'o');
+                                const hasRed = project.members.some((m) => m.submissionStatus === 'x');
 
                                 let statusBadge = <span className="inline-flex items-center px-2 py-0.5 rounded text-xs font-medium bg-gray-100 text-gray-800">미확인</span>;
                                 if (allGreen) statusBadge = <span className="inline-flex items-center px-2 py-0.5 rounded text-xs font-medium bg-green-100 text-green-800">완료</span>;

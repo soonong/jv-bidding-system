@@ -1,3 +1,4 @@
+
 import path from 'path';
 import { defineConfig, loadEnv } from 'vite';
 import react from '@vitejs/plugin-react';
@@ -9,20 +10,10 @@ export default defineConfig(({ mode }) => {
     server: {
       port: 3000,
       host: '0.0.0.0',
-      proxy: {
-        '/api/bidding': {
-          target: 'https://bidding2.kr',
-          changeOrigin: true,
-          rewrite: (path) => path.replace(/^\/api\/bidding/, ''),
-          secure: false,
-        },
-        '/api/file': {
-          target: 'https://file.bidding2.kr',
-          changeOrigin: true,
-          rewrite: (path) => path.replace(/^\/api\/file/, ''),
-          secure: false, // Bypass SSL verification 
-        }
-      }
+    },
+    preview: {
+      port: 4173,
+      host: '0.0.0.0',
     },
     plugins: [react()],
     define: {

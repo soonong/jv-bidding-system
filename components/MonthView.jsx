@@ -1,15 +1,7 @@
+
 import React, { useMemo } from 'react';
-import { BidProject } from '../types';
 
-interface MonthViewProps {
-    currentDate: Date;
-    projects: BidProject[];
-    onSelectProject: (project: BidProject) => void;
-    selectedProjectId?: string;
-    onViewChange: (view: 'month' | 'week' | 'list') => void;
-}
-
-export const MonthView: React.FC<MonthViewProps> = ({
+export const MonthView = ({
     currentDate,
     projects,
     onSelectProject,
@@ -99,7 +91,7 @@ export const MonthView: React.FC<MonthViewProps> = ({
                                 }
                                 acc[key].push(proj);
                                 return acc;
-                            }, {} as Record<string, BidProject[]>);
+                            }, {});
 
                             return (
                                 <div
@@ -122,11 +114,11 @@ export const MonthView: React.FC<MonthViewProps> = ({
                                     <div className="flex flex-col gap-1">
                                         {Object.entries(groupedProjects)
                                             .sort(([, a], [, b]) => {
-                                                const listA = a as BidProject[];
-                                                const listB = b as BidProject[];
+                                                const listA = a;
+                                                const listB = b;
 
                                                 // 1. Color Rank (Red 0, Gray 1, Green 2, None 3)
-                                                const getRank = (list: BidProject[]) => {
+                                                const getRank = (list) => {
                                                     const hasMembers = list.some(p => p.members.length > 0);
                                                     if (!hasMembers) return 3;
 
@@ -148,16 +140,16 @@ export const MonthView: React.FC<MonthViewProps> = ({
                                                 if (lenDiff !== 0) return lenDiff;
 
                                                 // 3. Amount Rank (Descending)
-                                                const getAmt = (list: BidProject[]) => {
+                                                const getAmt = (list) => {
                                                     const p = list.find(x => x.amount) || list[0];
                                                     return parseFloat((p.amount || "0").replace(/[^0-9]/g, '')) || 0;
                                                 };
                                                 return getAmt(listB) - getAmt(listA);
                                             })
                                             .map(([key, val]) => {
-                                                const group = val as BidProject[];
+                                                const group = val;
                                                 const mainProject = group[0];
-                                                const isSelected = selectedProjectId && group.some((p: BidProject) => p.id === selectedProjectId);
+                                                const isSelected = selectedProjectId && group.some((p) => p.id === selectedProjectId);
 
                                                 // Status-based coloring (Group Level)
                                                 const hasMembers = group.some(p => p.members.length > 0);

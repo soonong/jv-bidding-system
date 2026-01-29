@@ -1,27 +1,15 @@
 
 import React, { useRef, useState } from 'react';
-import { User } from '../App';
 
-interface HeaderProps {
-    onRefresh: () => void;
-    onUpload: (file: File) => void;
-    onOpenSettings: () => void;
-    onOpenAccountSettings: () => void;
-    isRefreshing: boolean;
-    currentUser: User | null;
-    onLogin: () => void;
-    onLogout: () => void;
-}
-
-export const Header: React.FC<HeaderProps> = ({ onRefresh, onUpload, onOpenSettings, onOpenAccountSettings, isRefreshing, currentUser, onLogin, onLogout }) => {
+export const Header = ({ onRefresh, onUpload, onOpenSettings, onOpenAccountSettings, isRefreshing, currentUser, onLogin, onLogout }) => {
     const [showProfileMenu, setShowProfileMenu] = useState(false);
-    const fileInputRef = useRef<HTMLInputElement>(null);
+    const fileInputRef = useRef(null);
 
     const handleUploadClick = () => {
         fileInputRef.current?.click();
     };
 
-    const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const handleFileChange = (event) => {
         const file = event.target.files?.[0];
         if (file) {
             onUpload(file);

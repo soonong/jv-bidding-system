@@ -1,15 +1,7 @@
+
 import React from 'react';
-import { BidProject } from '../types';
 
-interface WeekViewProps {
-    currentDate: Date;
-    projects: BidProject[];
-    onSelectProject: (project: BidProject) => void;
-    selectedProjectId?: string;
-    onViewChange: (view: 'month' | 'week' | 'list') => void;
-}
-
-export const WeekView: React.FC<WeekViewProps> = ({
+export const WeekView = ({
     currentDate,
     projects,
     onSelectProject,
@@ -34,7 +26,6 @@ export const WeekView: React.FC<WeekViewProps> = ({
     }
 
     const dayLabels = ['일', '월', '화', '수', '목', '금', '토'];
-    const hours = ['08:00', '09:00', '10:00', '11:00', '12:00', '13:00', '14:00', '15:00', '16:00', '17:00', '18:00'];
 
     return (
         <div className="flex-1 px-6 pb-6 overflow-hidden flex flex-col">
@@ -69,7 +60,7 @@ export const WeekView: React.FC<WeekViewProps> = ({
                                 }
                                 acc[key].push(proj);
                                 return acc;
-                            }, {} as Record<string, BidProject[]>);
+                            }, {});
 
                             // Sort keys for consistent order (e.g. by Project Name)
                             const sortedKeys = Object.keys(groupedProjects).sort((a, b) => {
@@ -83,7 +74,7 @@ export const WeekView: React.FC<WeekViewProps> = ({
                                     {sortedKeys.map((key) => {
                                         const group = groupedProjects[key];
                                         const mainProject = group[0];
-                                        const isSelected = selectedProjectId && group.some((p: BidProject) => p.id === selectedProjectId);
+                                        const isSelected = selectedProjectId && group.some((p) => p.id === selectedProjectId);
 
                                         const colors = [
                                             { bg: 'bg-emerald-50', text: 'text-emerald-800', border: 'border-emerald-500', hover: 'hover:bg-emerald-100' },

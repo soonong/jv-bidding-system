@@ -1,16 +1,8 @@
 
 import React, { useState, useEffect } from 'react';
-import { User } from '../App';
 
-interface AccountSettingsModalProps {
-    isOpen: boolean;
-    onClose: () => void;
-    currentUser: User | null;
-    onUpdateUser: (user: User) => void;
-}
-
-export const AccountSettingsModal: React.FC<AccountSettingsModalProps> = ({ isOpen, onClose, currentUser, onUpdateUser }) => {
-    const [aliases, setAliases] = useState<string[]>([]);
+export const AccountSettingsModal = ({ isOpen, onClose, currentUser, onUpdateUser }) => {
+    const [aliases, setAliases] = useState([]);
     const [newAlias, setNewAlias] = useState('');
 
     useEffect(() => {
@@ -32,7 +24,7 @@ export const AccountSettingsModal: React.FC<AccountSettingsModalProps> = ({ isOp
         }
     };
 
-    const handleRemoveAlias = (aliasToRemove: string) => {
+    const handleRemoveAlias = (aliasToRemove) => {
         setAliases(aliases.filter(a => a !== aliasToRemove));
     };
 

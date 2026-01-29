@@ -1,17 +1,11 @@
+
 import React, { useState, useEffect } from 'react';
-import { BidProject } from '../types';
 
-interface SidebarDetailsProps {
-    project: BidProject | null;
-    siblings?: BidProject[];
-    onClose: () => void;
-}
-
-export const SidebarDetails: React.FC<SidebarDetailsProps> = ({ project, siblings = [], onClose }) => {
+export const SidebarDetails = ({ project, siblings = [], onClose }) => {
     // State to track which proposal (project from the group) is currently viewed
     // Default to the passed project
-    const [selectedProposal, setSelectedProposal] = useState<BidProject | null>(project);
-    const [filterArtist, setFilterArtist] = useState<string | null>(null);
+    const [selectedProposal, setSelectedProposal] = useState(project);
+    const [filterArtist, setFilterArtist] = useState(null);
 
     useEffect(() => {
         setSelectedProposal(project);
@@ -22,10 +16,10 @@ export const SidebarDetails: React.FC<SidebarDetailsProps> = ({ project, sibling
 
     // Combine current project with siblings to get the full group
     // Filter duplicates just in case
-    const allProposals = [project!, ...siblings].filter((v, i, a) => a.findIndex(t => (t.id === v.id)) === i);
+    const allProposals = [project, ...siblings].filter((v, i, a) => a.findIndex(t => (t.id === v.id)) === i);
     // Sort by Status (Green > Red > Gray) then Representative name
     allProposals.sort((a, b) => {
-        const getStatusScore = (p: BidProject) => {
+        const getStatusScore = (p) => {
             const allGreen = p.members.length > 0 && p.members.every(m => m.submissionStatus === 'o');
             const hasRed = p.members.some(m => m.submissionStatus === 'x');
             if (allGreen) return 2;

@@ -17,11 +17,7 @@ export const USERS = [
     { name: '신종석', id: 'ss123' },
 ];
 
-interface LoginPageProps {
-    onLogin: (user: any) => void;
-}
-
-export const LoginPage: React.FC<LoginPageProps> = ({ onLogin }) => {
+export const LoginPage = ({ onLogin }) => {
     const [authId, setAuthId] = useState('');
     const [rememberMe, setRememberMe] = useState(false);
     const [error, setError] = useState('');
@@ -39,7 +35,7 @@ export const LoginPage: React.FC<LoginPageProps> = ({ onLogin }) => {
         }
     }, []);
 
-    const handleSubmit = (e: React.FormEvent) => {
+    const handleSubmit = (e) => {
         e.preventDefault();
         const user = USERS.find(u => u.id === authId);
         if (user) {

@@ -1,13 +1,12 @@
-import { BidProject } from './types';
 
 // Helper to create date for current year/month
-const getDate = (day: number) => {
+const getDate = (day) => {
   const d = new Date();
   d.setDate(day);
   return d;
 };
 
-export const MOCK_PROJECTS: BidProject[] = [
+export const MOCK_PROJECTS = [
   {
     id: "1",
     projectName: "2025년도 한전 신재생 연계용 ESS 구축사업",

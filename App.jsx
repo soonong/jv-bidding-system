@@ -9,16 +9,14 @@ import { ListView } from './components/ListView';
 import { LoginPage } from './components/LoginPage';
 import { SettingsModal } from './components/SettingsModal';
 import { AccountSettingsModal } from './components/AccountSettingsModal';
-import { BidProject } from './types';
 import { parseExcelFile, parseBidNoticeExcel } from './utils/excelService';
 import { fetchBiddingData, fetchAndDownloadRawData } from './utils/apiService';
 import dbData from './db.json';
 
 // Helper to parse db data
-// Helper to parse db data
-const loadInitialData = (): BidProject[] => {
-    const processItems = (items: any[]) => {
-        return items.map((item: any) => ({
+const loadInitialData = () => {
+    const processItems = (items) => {
+        return items.map((item) => ({
             ...item,
             parsedDate: new Date(item.parsedDate || item.deadline),
             // Polyfill new required fields from legacy ones
@@ -28,7 +26,7 @@ const loadInitialData = (): BidProject[] => {
             noticeNumber: item.noticeNumber || item.noticeNo,
             amount: item.amount || item.price,
             price: item.price || item.amount
-        })) as BidProject[];
+        }));
     };
 
     const saved = localStorage.getItem('jv-bidding-projects');
@@ -44,30 +42,22 @@ const loadInitialData = (): BidProject[] => {
     return processItems(dbData);
 };
 
-export interface User {
-    name: string;
-    username: string;
-    avatar: string;
-    role?: string;
-    aliases?: string[];
-}
-
 function Dashboard() {
-    const [projects, setProjects] = useState<BidProject[]>(loadInitialData());
-    const [selectedProject, setSelectedProject] = useState<BidProject | null>(null);
+    const [projects, setProjects] = useState(loadInitialData());
+    const [selectedProject, setSelectedProject] = useState(null);
     const [currentDate, setCurrentDate] = useState(new Date());
-    const [view, setView] = useState<'month' | 'week' | 'list'>('month');
+    const [view, setView] = useState('month');
     const [isRefreshing, setIsRefreshing] = useState(false);
-    const [currentUser, setCurrentUser] = useState<User | null>(null);
+    const [currentUser, setCurrentUser] = useState(null);
     const [isSettingsOpen, setIsSettingsOpen] = useState(false);
     const [isAccountSettingsOpen, setIsAccountSettingsOpen] = useState(false);
 
     // Filters
-    const [selectedCategories, setSelectedCategories] = useState<string[]>(() => {
+    const [selectedCategories, setSelectedCategories] = useState(() => {
         const saved = localStorage.getItem('jv-selected-categories');
         return saved ? JSON.parse(saved) : [];
     });
-    const [filterStatus, setFilterStatus] = useState<'all' | 'ongoing' | 'completed'>('all');
+    const [filterStatus, setFilterStatus] = useState('all');
     const [searchQuery, setSearchQuery] = useState('');
 
     const navigate = useNavigate();
@@ -98,24 +88,24 @@ function Dashboard() {
         localStorage.setItem('jv-bidding-projects', JSON.stringify(projects));
     }, [projects]);
 
-    const handleUpdateCategories = (cats: string[]) => {
+    const handleUpdateCategories = (cats) => {
         setSelectedCategories(cats);
         localStorage.setItem('jv-selected-categories', JSON.stringify(cats));
     };
 
-    const handleUpdateUser = (updatedUser: User) => {
+    const handleUpdateUser = (updatedUser) => {
         setCurrentUser(updatedUser);
         localStorage.setItem('jv-user', JSON.stringify(updatedUser));
     };
 
-    const handleViewChange = (newView: 'month' | 'week' | 'list') => {
+    const handleViewChange = (newView) => {
         setView(newView);
         if (newView === 'month') navigate('/');
         else if (newView === 'week') navigate('/week');
         else if (newView === 'list') navigate('/list');
     };
 
-    const handleExcelUpload = async (file: File) => {
+    const handleExcelUpload = async (file) => {
         if (!file) return;
         setIsRefreshing(true);
         try {
@@ -144,7 +134,7 @@ function Dashboard() {
             } else {
                 alert("엑셀 파일에서 유효한 데이터를 찾을 수 없습니다. (형식을 확인해주세요)");
             }
-        } catch (e: any) {
+        } catch (e) {
             console.error("Upload failed", e);
             alert("파일 처리 중 오류가 발생했습니다: " + e.message);
         } finally {
@@ -190,7 +180,7 @@ function Dashboard() {
                 await fetchAndDownloadRawData();
             }
 
-        } catch (error: any) {
+        } catch (error) {
             console.error("Failed to refresh data", error);
             const msg = error.message || "알 수 없는 오류";
             alert(`데이터 업데이트 실패: ${msg}\n\n(개발자 도구(F12)의 Console 탭을 확인해주세요.)`);
@@ -204,7 +194,7 @@ function Dashboard() {
         }
     };
 
-    const handleDateChange = (direction: 'prev' | 'next') => {
+    const handleDateChange = (direction) => {
         const newDate = new Date(currentDate);
         if (view === 'month') {
             newDate.setMonth(currentDate.getMonth() + (direction === 'next' ? 1 : -1));
@@ -214,7 +204,7 @@ function Dashboard() {
         setCurrentDate(newDate);
     };
 
-    const handleLogin = (user: User) => {
+    const handleLogin = (user) => {
         setCurrentUser(user);
         localStorage.setItem('jv-user', JSON.stringify(user));
     };
@@ -237,7 +227,7 @@ function Dashboard() {
         let hasPermission = false;
         if (p.sharedWith.includes(currentUser.name)) hasPermission = true;
         else if (p.sharedWith.includes(currentUser.username)) hasPermission = true;
-        else if (currentUser.aliases && currentUser.aliases.some(alias => p.sharedWith!.includes(alias))) hasPermission = true;
+        else if (currentUser.aliases && currentUser.aliases.some(alias => p.sharedWith.includes(alias))) hasPermission = true;
 
         if (!hasPermission) return false;
 

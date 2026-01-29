@@ -1,13 +1,6 @@
-import { BidProject, CompanyMember } from '../types';
-
-declare global {
-  interface Window {
-    XLSX: any;
-  }
-}
 
 // Function to parse the Agreement Status Excel (Existing)
-export const parseExcelFile = async (file: File): Promise<BidProject[]> => {
+export const parseExcelFile = async (file) => {
   return new Promise((resolve, reject) => {
     const reader = new FileReader();
 
@@ -23,15 +16,15 @@ export const parseExcelFile = async (file: File): Promise<BidProject[]> => {
         const firstSheetName = workbook.SheetNames[0];
         const worksheet = workbook.Sheets[firstSheetName];
 
-        const rawData: any[][] = XLSX.utils.sheet_to_json(worksheet, { header: 1 });
+        const rawData = XLSX.utils.sheet_to_json(worksheet, { header: 1 });
 
         if (rawData.length < 2) return resolve([]);
 
-        const headers = rawData[0] as string[];
+        const headers = rawData[0];
         const rows = rawData.slice(1);
 
-        const projects: BidProject[] = rows.map((row, index) => {
-          const getValueByName = (headerNames: string | string[]) => {
+        const projects = rows.map((row, index) => {
+          const getValueByName = (headerNames) => {
             const names = Array.isArray(headerNames) ? headerNames : [headerNames];
             for (const name of names) {
               const idx = headers.findIndex(h => h && typeof h === 'string' && h.includes(name));
@@ -77,7 +70,7 @@ export const parseExcelFile = async (file: File): Promise<BidProject[]> => {
 
           if (!parsedDate) parsedDate = new Date(); // Fallback
 
-          const findRelativeCol = (startIdx: number, keyword: string, maxOffset: number = 8) => {
+          const findRelativeCol = (startIdx, keyword, maxOffset = 8) => {
             for (let i = 1; i <= maxOffset; i++) {
               const h = headers[startIdx + i];
               if (h && typeof h === 'string') {
@@ -88,7 +81,7 @@ export const parseExcelFile = async (file: File): Promise<BidProject[]> => {
             return -1;
           };
 
-          const members: CompanyMember[] = [];
+          const members = [];
           const memberIndices = headers
             .map((h, i) => {
               if (h && typeof h === 'string') {
@@ -143,11 +136,11 @@ export const parseExcelFile = async (file: File): Promise<BidProject[]> => {
             deadline: String(rawDate),
             representative: String(getValueByName(["대표사"])),
             members: members,
-            status: 'pending' as const,
+            status: 'pending',
             parsedDate: parsedDate,
             sharedWith: sharedWith
           };
-        }).filter(p => p !== null) as BidProject[];
+        }).filter(p => p !== null);
 
         console.log(`Parsed ${projects.length} valid projects`);
         resolve(projects);
@@ -163,7 +156,7 @@ export const parseExcelFile = async (file: File): Promise<BidProject[]> => {
 
 // Function to parse the Bid Notice List Excel (New)
 // User specified: B=Name(1), D=Amount(3), H=Client(7), I=Location(8), J=Deadline(9)
-export const parseBidNoticeExcel = async (file: File): Promise<BidProject[]> => {
+export const parseBidNoticeExcel = async (file) => {
   return new Promise((resolve, reject) => {
     const reader = new FileReader();
 
@@ -178,15 +171,15 @@ export const parseBidNoticeExcel = async (file: File): Promise<BidProject[]> => 
         const workbook = XLSX.read(data, { type: 'binary' });
         const firstSheetName = workbook.SheetNames[0];
         const worksheet = workbook.Sheets[firstSheetName];
-        const rawData: any[][] = XLSX.utils.sheet_to_json(worksheet, { header: 1 });
+        const rawData = XLSX.utils.sheet_to_json(worksheet, { header: 1 });
 
         if (rawData.length < 2) return resolve([]);
 
-        const headers = rawData[0] as string[];
+        const headers = rawData[0];
         const rows = rawData.slice(1);
 
-        const projects: BidProject[] = rows.map((row, index) => {
-          const getValueByName = (headerNames: string | string[]) => {
+        const projects = rows.map((row, index) => {
+          const getValueByName = (headerNames) => {
             const names = Array.isArray(headerNames) ? headerNames : [headerNames];
             for (const name of names) {
               const idx = headers.findIndex(h => h && typeof h === 'string' && h.includes(name));
@@ -228,11 +221,11 @@ export const parseBidNoticeExcel = async (file: File): Promise<BidProject[]> => 
             deadline: String(rawDate),
             representative: "-",
             members: [], // No members in notice list
-            status: 'pending' as const,
+            status: 'pending',
             parsedDate: parsedDate,
             sharedWith: [] // Default empty sharedWith
           };
-        }).filter(p => p !== null) as BidProject[];
+        }).filter(p => p !== null);
 
         console.log(`Parsed ${projects.length} bid notices`);
         resolve(projects);

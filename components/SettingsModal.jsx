@@ -26,15 +26,8 @@ export const CATEGORY_GROUPS = {
     ]
 };
 
-interface SettingsModalProps {
-    isOpen: boolean;
-    onClose: () => void;
-    selectedCategories: string[];
-    onUpdateCategories: (categories: string[]) => void;
-}
-
-export const SettingsModal: React.FC<SettingsModalProps> = ({ isOpen, onClose, selectedCategories, onUpdateCategories }) => {
-    const [localSelected, setLocalSelected] = useState<string[]>(selectedCategories);
+export const SettingsModal = ({ isOpen, onClose, selectedCategories, onUpdateCategories }) => {
+    const [localSelected, setLocalSelected] = useState(selectedCategories);
 
     useEffect(() => {
         if (isOpen) {
@@ -42,7 +35,7 @@ export const SettingsModal: React.FC<SettingsModalProps> = ({ isOpen, onClose, s
         }
     }, [isOpen, selectedCategories]);
 
-    const toggleCategory = (category: string) => {
+    const toggleCategory = (category) => {
         setLocalSelected(prev => {
             if (prev.includes(category)) {
                 return prev.filter(c => c !== category);
