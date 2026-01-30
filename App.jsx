@@ -10,7 +10,7 @@ import { LoginPage } from './components/LoginPage';
 import { SettingsModal } from './components/SettingsModal';
 import { AccountSettingsModal } from './components/AccountSettingsModal';
 
-import { fetchBiddingData, fetchAndDownloadRawData } from './utils/apiService';
+import { fetchBiddingData } from './utils/apiService';
 import dbData from './db.json';
 
 // Helper to parse db data
@@ -29,16 +29,8 @@ const loadInitialData = () => {
         }));
     };
 
-    const saved = localStorage.getItem('jv-bidding-projects');
-    if (saved) {
-        try {
-            const parsed = JSON.parse(saved);
-            return processItems(parsed);
-        } catch (e) {
-            console.error("Failed to load from local storage", e);
-        }
-    }
-
+    // Fallback to minimal dbData or empty array initially
+    // We cannot use localStorage for thousands of items due to 5MB limit
     return processItems(dbData);
 };
 
@@ -54,7 +46,7 @@ function Dashboard() {
 
     // Filters
     const [selectedCategories, setSelectedCategories] = useState(() => {
-        const saved = localStorage.getItem('jv-selected-categories');
+        const saved = localStorage.getItem('jv-selected-categories-v2');
         return saved ? JSON.parse(saved) : [];
     });
     const [filterStatus, setFilterStatus] = useState('all');
@@ -65,11 +57,24 @@ function Dashboard() {
 
     // Check login session (mock)
     useEffect(() => {
+        // Cleanup old large data to fix QuotaExceededError for settings
+        try {
+            localStorage.removeItem('jv-bidding-projects-v2');
+            localStorage.removeItem('jv-bidding-projects');
+        } catch (e) { }
+
         const savedUser = localStorage.getItem('jv-user');
         if (savedUser) {
             setCurrentUser(JSON.parse(savedUser));
         }
     }, []);
+
+    // Auto-update data on login
+    useEffect(() => {
+        if (currentUser) {
+            handleRefresh();
+        }
+    }, [currentUser]);
 
     // Sync URL with view
     useEffect(() => {
@@ -83,14 +88,18 @@ function Dashboard() {
         }
     }, [location, currentUser]);
 
-    // Save projects
-    useEffect(() => {
-        localStorage.setItem('jv-bidding-projects', JSON.stringify(projects));
-    }, [projects]);
+    // Save projects -> DISABLED due to QuotaExceededError
+    // useEffect(() => {
+    //     try {
+    //         localStorage.setItem('jv-bidding-projects-v2', JSON.stringify(projects));
+    //     } catch (e) {
+    //         console.warn("Could not save to localStorage (Quota Exceeded)", e);
+    //     }
+    // }, [projects]);
 
     const handleUpdateCategories = (cats) => {
         setSelectedCategories(cats);
-        localStorage.setItem('jv-selected-categories', JSON.stringify(cats));
+        localStorage.setItem('jv-selected-categories-v2', JSON.stringify(cats));
     };
 
     const handleUpdateUser = (updatedUser) => {
@@ -111,28 +120,21 @@ function Dashboard() {
         setIsRefreshing(true);
         try {
             const newProjects = await fetchBiddingData();
+            console.log("Fetched Projects:", newProjects);
 
-            if (newProjects.length > 0) {
-                // Merge logic: Combine new API date with existing local modifications if needed?
-                // For now, replacing strictly with API source as "Truth". 
-                // However, we might want to preserve user-local "sharedWith" permissions if we want that to persist.
+            if (newProjects && Array.isArray(newProjects) && newProjects.length > 0) {
+                // Merge SharedWith permissions
+                const accessibleProjects = newProjects.filter(p => {
+                    // Sanity Check: ensuring essential fields exist to prevent render crashes
+                    return p && p.id && p.projectName && p.parsedDate instanceof Date && !isNaN(p.parsedDate);
+                });
 
-                // Let's implement a simple merge for 'sharedWith' if the project ID/NoticeNo matches.
-                // Or simply default to "All visible to me"? 
-                // The API seems to filter by 'moduleKey', so maybe all are mine?
+                console.log("Sanitized Projects:", accessibleProjects);
 
-                // Let's assume all fetched projects are relevant.
-                // We'll Assign basic permission to current user so they can see them immediately.
-
-                const accessibleProjects = newProjects.map(p => ({
-                    ...p,
-                    // Auto-share with current user so it appears in the list
-                    sharedWith: currentUser ? [
-                        currentUser.name,
-                        currentUser.username,
-                        ...(currentUser.aliases || [])
-                    ] : []
-                }));
+                if (accessibleProjects.length === 0) {
+                    alert("데이터를 가져왔으나 유효한 형식이 아니거나 표시할 수 있는 데이터가 없습니다.");
+                    return;
+                }
 
                 setProjects(accessibleProjects);
                 alert(`${accessibleProjects.length}개의 최신 데이터로 업데이트되었습니다.`);
@@ -140,20 +142,10 @@ function Dashboard() {
                 alert("가져올 데이터가 없습니다.");
             }
 
-            // Ask user if they want to download the raw file for debugging
-            if (window.confirm("API 원본 데이터(JSON)를 다운로드하여 확인하시겠습니까?")) {
-                await fetchAndDownloadRawData();
-            }
-
         } catch (error) {
             console.error("Failed to refresh data", error);
             const msg = error.message || "알 수 없는 오류";
             alert(`데이터 업데이트 실패: ${msg}\n\n(개발자 도구(F12)의 Console 탭을 확인해주세요.)`);
-
-            // Optionally offer download on error too
-            if (window.confirm("오류가 발생했습니다. 원본 데이터를 다운로드하여 확인하시겠습니까?")) {
-                await fetchAndDownloadRawData();
-            }
         } finally {
             setIsRefreshing(false);
         }
@@ -162,6 +154,8 @@ function Dashboard() {
     const handleDateChange = (direction) => {
         const newDate = new Date(currentDate);
         if (view === 'month') {
+            // Set date to 1st to prevent month skipping (e.g. Jan 31 + 1 month -> Mar 3 or 2)
+            newDate.setDate(1);
             newDate.setMonth(currentDate.getMonth() + (direction === 'next' ? 1 : -1));
         } else if (view === 'week') {
             newDate.setDate(currentDate.getDate() + (direction === 'next' ? 7 : -7));
@@ -189,13 +183,18 @@ function Dashboard() {
     // Filter projects
     const visibleProjects = projects.filter(p => {
         // 1. Permission Filter
-        if (!p.sharedWith) return false;
+        // Only show projects where the "sharedWith" field (artist/writer) includes the current user
+        if (!p.sharedWith || p.sharedWith.length === 0) return false;
+
         let hasPermission = false;
+        // Check exact match with name or username
         if (p.sharedWith.includes(currentUser.name)) hasPermission = true;
-        else if (p.sharedWith.includes(currentUser.username)) hasPermission = true;
-        else if (currentUser.aliases && currentUser.aliases.some(alias => p.sharedWith.includes(alias))) hasPermission = true;
+        if (p.sharedWith.includes(currentUser.username)) hasPermission = true;
+        // Check aliases if they exist
+        if (currentUser.aliases && currentUser.aliases.some(alias => p.sharedWith.includes(alias))) hasPermission = true;
 
         if (!hasPermission) return false;
+
 
         // 2. Category Filter
         if (selectedCategories.length > 0) {

@@ -86,8 +86,8 @@ export const SidebarDetails = ({ project, siblings = [], onClose }) => {
                 }
             }
             // Format ID (000-00-00000)
-            let idStr = m.id;
-            const cleanId = (m.id || '').replace(/[^0-9]/g, '');
+            let idStr = m.businessNo;
+            const cleanId = (m.businessNo || '').replace(/[^0-9]/g, '');
             if (cleanId.length === 10) {
                 idStr = `${cleanId.slice(0, 3)}-${cleanId.slice(3, 5)}-${cleanId.slice(5)}`;
             }
@@ -223,7 +223,7 @@ export const SidebarDetails = ({ project, siblings = [], onClose }) => {
                                 </thead>
                                 <tbody className="divide-y divide-[#e7ebf3]">
                                     {selectedProposal.members.map((member, idx) => {
-                                        let formattedId = member.id || '';
+                                        let formattedId = member.businessNo || '';
                                         const cleanId = formattedId.replace(/[^0-9]/g, '');
                                         if (cleanId.length === 10) {
                                             formattedId = `${cleanId.slice(0, 3)}-${cleanId.slice(3, 5)}-${cleanId.slice(5)}`;

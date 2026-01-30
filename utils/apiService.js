@@ -1,4 +1,3 @@
-
 import axios from 'axios';
 
 // Base URLs
@@ -13,7 +12,7 @@ const stripHtml = (html) => {
 
 export const fetchBiddingData = async () => {
     try {
-       
+
         console.log("Fetching API Data...");
 
         const [bidRes, agreeRes] = await Promise.all([
@@ -51,46 +50,52 @@ export const fetchBiddingData = async () => {
             return [];
         }
 
-        // 1. Create Projects Map from Bid API
-        // Key: gong_no (Notice Number)
-        const projectMap = new Map();
-
+        // 1. Index Bid Data by Notice Number
+        const bidMap = new Map();
         rawBids.forEach((item) => {
             const noticeNo = String(item['공고번호'] || "").trim();
             if (!noticeNo) return;
-
-            const project = {
-                id: noticeNo,
-                noticeNo: noticeNo,
-                noticeNumber: noticeNo, // Legacy support
-                name: stripHtml(item['공사명'] || "제목 없음"),
-                projectName: stripHtml(item['공사명'] || "제목 없음"), // Legacy support
-                client: item['발주처'] || "미정",
-                location: item['지역제한'] || "전국",
-                amount: item['기초금액'] || "0",
-                price: item['기초금액'] || "0", // Legacy support
-                deadline: item['협정마감일'] || "",
-                // Parse date for sorting if possible, otherwise rely on string
-                parsedDate: item['협정마감일'] ? new Date(item['협정마감일']) : undefined,
-                bidDate: item['입찰일'] || "",
-                projectType: "공동도급", // Default
-                status: "공고중",
-                representative: "", // Will be filled by Agreement logic
-                members: [],
-                memo: "",
-                sharedWith: [],
-                tags: []
-            };
-            projectMap.set(noticeNo, project);
+            // Store the raw bid item first
+            bidMap.set(noticeNo, item);
         });
 
-        // 2. Populate Members from Agreement API
-        if (Array.isArray(rawAgreements)) {
-            rawAgreements.forEach((agreeItem) => {
-                const noticeNo = String(agreeItem['공고번호'] || "").trim();
-                const project = projectMap.get(noticeNo);
+        // 2. Process Agreements and create Project objects
+        const projects = [];
+        const processedNotices = new Set(); // Track which notices have at least one agreement
 
-                if (project) {
+        if (Array.isArray(rawAgreements)) {
+            rawAgreements.forEach((agreeItem, idx) => {
+                const noticeNo = String(agreeItem['공고번호'] || "").trim();
+                const rawBid = bidMap.get(noticeNo);
+
+                // If we have bid data for this agreement
+                if (rawBid) {
+                    processedNotices.add(noticeNo);
+
+                    // Create Base Project Object
+                    const project = {
+                        // Generate unique ID for this specific agreement (Consortium)
+                        id: `${noticeNo}_${idx}`,
+                        noticeNo: noticeNo,
+                        noticeNumber: noticeNo,
+                        name: stripHtml(rawBid['공사명'] || "제목 없음"),
+                        projectName: stripHtml(rawBid['공사명'] || "제목 없음"),
+                        client: rawBid['발주처'] || "미정",
+                        location: rawBid['지역제한'] || "전국",
+                        amount: rawBid['기초금액'] || "0",
+                        price: rawBid['기초금액'] || "0",
+                        deadline: rawBid['협정마감일'] || "",
+                        parsedDate: rawBid['협정마감일'] ? new Date(rawBid['협정마감일']) : undefined,
+                        bidDate: rawBid['입찰일'] || "",
+                        projectType: "공동도급",
+                        status: "공고중",
+                        representative: "",
+                        members: [],
+                        memo: "",
+                        sharedWith: [],
+                        tags: []
+                    };
+
                     const members = [];
 
                     // Check up to 4 members
@@ -105,7 +110,6 @@ export const fetchBiddingData = async () => {
                             const ratio = parseFloat(agreeItem[ratioKey] || "0");
                             // Determine status string
                             let status = agreeItem[statusKey] || "미제출";
-                            // Simple mapping if needed, e.g. "O" -> "제출"
                             if (status === 'O') status = "제출";
                             if (status === 'X') status = "미제출";
 
@@ -146,64 +150,51 @@ export const fetchBiddingData = async () => {
                         }
                     }
 
+                    // Extract Writer/Artist (Conso Artist)
+                    // The correct field from API headers is '컨소아티스트'
+                    const artist = agreeItem['컨소아티스트'] || agreeItem['작성자'] || agreeItem['담당자'] || "";
+                    if (artist) {
+                        project.sharedWith = [artist];
+                    }
+
                     project.members = members;
+                    projects.push(project);
                 }
             });
         }
 
-        // 3. Convert Map to Array
-        return Array.from(projectMap.values());
+        // 3. Add Bids that had NO agreements (Orphans)
+        bidMap.forEach((rawBid, noticeNo) => {
+            if (!processedNotices.has(noticeNo)) {
+                const project = {
+                    id: noticeNo, // Use noticeNo as ID since it's the only one
+                    noticeNo: noticeNo,
+                    noticeNumber: noticeNo,
+                    name: stripHtml(rawBid['공사명'] || "제목 없음"),
+                    projectName: stripHtml(rawBid['공사명'] || "제목 없음"),
+                    client: rawBid['발주처'] || "미정",
+                    location: rawBid['지역제한'] || "전국",
+                    amount: rawBid['기초금액'] || "0",
+                    price: rawBid['기초금액'] || "0",
+                    deadline: rawBid['협정마감일'] || "",
+                    parsedDate: rawBid['협정마감일'] ? new Date(rawBid['협정마감일']) : undefined,
+                    bidDate: rawBid['입찰일'] || "",
+                    projectType: "공동도급",
+                    status: "공고중",
+                    representative: "미정",
+                    members: [], // Empty members
+                    memo: "",
+                    sharedWith: [],
+                    tags: []
+                };
+                projects.push(project);
+            }
+        });
+
+        return projects;
 
     } catch (error) {
         console.error("API Fetch Error:", error);
         throw error;
-    }
-};
-
-export const fetchAndDownloadRawData = async () => {
-    try {
-        console.log("Downloading Raw API Data for Debugging...");
-
-        const fetchSafe = async (url, label) => {
-            try {
-                const res = await axios.get(url);
-                return { success: true, status: res.status, data: res.data };
-            } catch (err) {
-                console.error(`Failed to fetch ${label}:`, err);
-                return {
-                    success: false,
-                    status: err.response?.status || 0,
-                    error: err.response?.data || err.message,
-                    headers: err.response?.headers
-                };
-            }
-        };
-
-        const bidRes = await fetchSafe(RAW_BID_API, "Bid Data");
-        const agreeRes = await fetchSafe(RAW_AGREE_API, "Agreement Data");
-
-        const debugData = {
-            timestamp: new Date().toISOString(),
-            bidApiUrl: RAW_BID_API,
-            agreementApiUrl: RAW_AGREE_API,
-            bidData: bidRes,
-            agreementData: agreeRes
-        };
-
-        const blob = new Blob([JSON.stringify(debugData, null, 2)], { type: "application/json" });
-        const url = window.URL.createObjectURL(blob);
-        const a = document.createElement("a");
-        a.href = url;
-        a.download = `api_debug_dump_${new Date().getTime()}.json`;
-        document.body.appendChild(a);
-        a.click();
-        document.body.removeChild(a);
-        window.URL.revokeObjectURL(url);
-
-        return true;
-    } catch (error) {
-        console.error("Failed to download raw data", error);
-        alert("원본 데이터 다운로드 실패 (콘솔 확인)");
-        return false;
     }
 };

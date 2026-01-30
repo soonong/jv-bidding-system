@@ -69,46 +69,7 @@ export const SettingsModal = ({ isOpen, onClose, selectedCategories, onUpdateCat
 
                 {/* Content */}
                 <div className="flex-1 overflow-y-auto p-6 bg-white custom-scrollbar">
-                    <div className="flex flex-col lg:flex-row gap-6">
 
-                        {/* Section: 일반건설 (Left) */}
-                        <div className="lg:w-1/4 space-y-4">
-                            <div className="pb-2 border-b border-gray-100 mb-2">
-                                <h3 className="font-bold text-gray-800">일반건설</h3>
-                            </div>
-                            <div className="flex flex-wrap gap-2">
-                                {CATEGORY_GROUPS["일반건설"].map(cat => (
-                                    <button
-                                        key={cat}
-                                        onClick={() => toggleCategory(cat)}
-                                        className={`
-                                            px-3 py-1.5 rounded-lg text-sm font-medium transition-all border
-                                            ${localSelected.includes(cat)
-                                                ? 'bg-green-50 text-green-700 border-green-500 ring-1 ring-green-500'
-                                                : 'bg-white text-gray-600 border-gray-200 hover:bg-gray-50 hover:border-gray-300'}
-                                        `}
-                                    >
-                                        {cat}
-                                    </button>
-                                ))}
-                            </div>
-                        </div>
-
-                        {/* Section: 기타건설 (Middle) ?? Image shows Left=Gen, Middle=Other, Right=Specialist? 
-                            The user image has General(Left top), Other(Left bottom), Specialist(Right).
-                            Let's follow the image layout roughly.
-                        */}
-                        <div className="lg:w-1/4 space-y-8">
-                            {/* Re-rendering General here if we want exact layout? 
-                                 No, I'll stick to logical columns or the grid the user showed.
-                                 Image:
-                                 Col 1: 일반건설 (Top), 기타건설 (Bottom)
-                                 Col 2: 전문건설 (Full Height)
-                             */}
-                            {/* Since I'm using flex row, I can do Col 1 and Col 2. */}
-                        </div>
-
-                    </div>
 
                     {/* Revised Layout based on Image */}
                     <div className="flex flex-col lg:flex-row h-full gap-0 border border-gray-200 rounded-xl overflow-hidden">

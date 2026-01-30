@@ -65,18 +65,17 @@ export const LoginPage = ({ onLogin }) => {
                     <div className="inline-flex items-center justify-center w-16 h-16 bg-blue-100 rounded-full mb-4 text-primary">
                         <span className="material-symbols-outlined text-4xl">calendar_month</span>
                     </div>
-                    <h1 className="text-2xl font-bold text-gray-800">컨소 캘린더 로그인</h1>
+                    <h1 className="text-2xl font-bold text-gray-800">컨소 다이어리 로그인</h1>
                     <p className="text-gray-500 text-sm mt-2">부여받은 권한 ID를 입력해주세요</p>
                 </div>
 
                 <form onSubmit={handleSubmit} className="space-y-6">
                     <div>
-                        <label className="block text-xs font-bold text-gray-500 mb-1 ml-1">권한 ID</label>
                         <input
                             type="password"
                             value={authId}
                             onChange={(e) => setAuthId(e.target.value)}
-                            placeholder="권한 ID 입력"
+                            placeholder="ID 입력"
                             className="w-full h-11 px-4 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent outline-none transition-all"
                             autoFocus
                             autoComplete="current-password"

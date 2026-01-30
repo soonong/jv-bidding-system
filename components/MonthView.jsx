@@ -189,7 +189,7 @@ export const MonthView = ({
                                                     >
                                                         <div className="flex justify-between items-center gap-1">
                                                             <span className="truncate font-medium">
-                                                                <span className="text-[11px] opacity-80 font-bold mr-1">{countLabel}</span>{cleanName}
+                                                                <span className="text-[11px] text-blue-600 font-bold mr-1 bg-white px-1 rounded border border-blue-200">{countLabel}</span>{cleanName}
                                                             </span>
                                                             {isUrgent && (
                                                                 <span className="shrink-0 w-1.5 h-1.5 rounded-full bg-red-500 animate-pulse"></span>
