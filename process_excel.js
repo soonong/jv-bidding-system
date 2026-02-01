@@ -30,6 +30,8 @@ try {
         const client = row['발주처'] ? String(row['발주처']).trim() : "";
         const location = row['지역제한'] ? String(row['지역제한']).trim() : "";
         const amount = row[' 기초금액 '] ? String(row[' 기초금액 ']).trim() : "";
+        const artist = row['컨소아티스트'] ? String(row['컨소아티스트']).trim() : "";
+        const sharedWith = artist ? [artist] : [];
 
         // Parse deadline
         let parsedDate = null;
@@ -110,6 +112,7 @@ try {
             status,
             members,
             parsedDate,
+            sharedWith,
         };
     }).filter(item => item.deadline && item.projectName);
 
