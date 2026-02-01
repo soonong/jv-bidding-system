@@ -86,7 +86,7 @@ export const MonthView = ({
                         </div>
 
                         {/* Calendar Grid */}
-                        <div className="grid grid-cols-7 flex-1 divide-x divide-y divide-[#e7ebf3]">
+                        <div className="grid grid-cols-7 flex-1 border-l border-[#e7ebf3]">
                             {calendarDays.map((day, idx) => {
                                 // Group projects by noticeNumber
                                 const groupedProjects = day.projects.reduce((acc, proj) => {
@@ -102,7 +102,7 @@ export const MonthView = ({
                                     <div
                                         key={`${day.isCurrentMonth}-${day.date}-${idx}`}
                                         className={`
-                                            min-h-[150px] p-2 flex flex-col gap-1 transition-colors relative group
+                                            min-h-[150px] p-2 flex flex-col gap-1 transition-colors relative group border-r border-b border-[#e7ebf3]
                                             ${!day.isCurrentMonth ? 'bg-gray-50/50' : 'hover:bg-blue-50/10'}
                                             ${day.fullDate.toDateString() === new Date().toDateString() ? 'bg-blue-50/20' : ''}
                                         `}
