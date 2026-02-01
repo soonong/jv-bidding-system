@@ -1,7 +1,7 @@
 
 import React, { useState, useEffect } from 'react';
 
-export const SidebarDetails = ({ project, siblings = [], onClose }) => {
+export const SidebarDetails = ({ project, siblings = [], onClose, onHide }) => {
     // State to track which proposal (project from the group) is currently viewed
     // Default to the passed project
     const [selectedProposal, setSelectedProposal] = useState(project);
@@ -112,7 +112,21 @@ export const SidebarDetails = ({ project, siblings = [], onClose }) => {
     return (
         <aside className="w-full md:w-[420px] h-[50vh] md:h-full bg-bg-surface border-t md:border-t-0 md:border-l border-[#e7ebf3] shadow-2xl flex flex-col overflow-hidden shrink-0 relative z-30">
             {/* Header */}
-            <div className="px-6 py-4 border-b border-[#e7ebf3] flex items-start justify-end bg-white sticky top-0 z-10">
+            <div className="px-6 py-4 border-b border-[#e7ebf3] flex items-start justify-between bg-white sticky top-0 z-10">
+                {onHide ? (
+                    <button
+                        onClick={() => {
+                            if (window.confirm("이 항목을 목록에서 숨기시겠습니까? (로컬 설정에 저장됩니다)")) {
+                                onHide(selectedProposal.id);
+                                onClose();
+                            }
+                        }}
+                        className="text-red-400 hover:text-red-600 transition-colors p-1 rounded-md hover:bg-red-50"
+                        title="이 공고 숨기기"
+                    >
+                        <span className="material-symbols-outlined">delete</span>
+                    </button>
+                ) : <div></div>}
                 <button onClick={onClose} className="text-gray-400 hover:text-gray-600 transition-colors p-1 rounded-md hover:bg-gray-100">
                     <span className="material-symbols-outlined">close</span>
                 </button>

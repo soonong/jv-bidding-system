@@ -49,6 +49,10 @@ function Dashboard() {
         const saved = localStorage.getItem('jv-selected-categories-v2');
         return saved ? JSON.parse(saved) : [];
     });
+    const [hiddenProjectIds, setHiddenProjectIds] = useState(() => {
+        const saved = localStorage.getItem('jv-hidden-projects');
+        return saved ? JSON.parse(saved) : [];
+    });
     const [filterStatus, setFilterStatus] = useState('all');
     const [searchQuery, setSearchQuery] = useState('');
 
@@ -105,6 +109,14 @@ function Dashboard() {
     const handleUpdateUser = (updatedUser) => {
         setCurrentUser(updatedUser);
         localStorage.setItem('jv-user', JSON.stringify(updatedUser));
+    };
+
+    const handleHideProject = (projectId) => {
+        setHiddenProjectIds(prev => {
+            const next = [...prev, projectId];
+            localStorage.setItem('jv-hidden-projects', JSON.stringify(next));
+            return next;
+        });
     };
 
     const handleViewChange = (newView) => {
@@ -182,6 +194,9 @@ function Dashboard() {
 
     // Filter projects
     const visibleProjects = projects.filter(p => {
+        // 0. Hidden Filter
+        if (hiddenProjectIds.includes(p.id)) return false;
+
         // 1. Permission Filter
         // Only show projects where the "sharedWith" field (artist/writer) includes the current user
         if (!p.sharedWith || p.sharedWith.length === 0) return false;
@@ -392,6 +407,7 @@ function Dashboard() {
                             (p.noticeNumber === selectedProject.noticeNumber && p.noticeNumber !== "")
                         )}
                         onClose={() => setSelectedProject(null)}
+                        onHide={handleHideProject}
                     />
                 )}
             </div>
