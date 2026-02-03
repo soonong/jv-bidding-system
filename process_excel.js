@@ -65,39 +65,45 @@ try {
         const members = [];
 
         // Helper to add member if name exists
-        const addMember = (name, id, share, role, contact) => {
+        const addMember = (name, id, share, role, contact, rawStatus) => {
             if (name && String(name).trim() !== '') {
+                let status = 'gray';
+                if (rawStatus === 'O' || rawStatus === 'o' || rawStatus === '제출') status = 'o';
+                else if (rawStatus === 'X' || rawStatus === 'x' || rawStatus === '미제출') status = 'x';
+
                 members.push({
                     name: String(name).trim(),
                     id: String(id || '').trim(),
                     share: String(share || '').trim(),
                     role: role,
-                    contact: String(contact || '').trim()
+                    contact: String(contact || '').trim(),
+                    status: status,
+                    submissionStatus: status
                 });
             }
         };
 
         // 1. Representative
-        addMember(row['대표사'], row['사업자등록번호'], row['지분율'], 'representative', row['카톡담당자']);
+        addMember(row['대표사'], row['사업자등록번호'], row['지분율'], 'representative', row['카톡담당자'], row['최종제출']);
 
         // 2. Member 1
-        addMember(row['구성사1'], row['사업자등록번호1'], row['지분율1'], 'member', row['카톡담당자1']);
+        addMember(row['구성사1'], row['사업자등록번호1'], row['지분율1'], 'member', row['카톡담당자1'], row['최종제출1']);
 
         // 3. Member 2
-        addMember(row['구성사2'], row['사업자등록번호2'], row['지분율2'], 'member', row['카톡담당자2']);
+        addMember(row['구성사2'], row['사업자등록번호2'], row['지분율2'], 'member', row['카톡담당자2'], row['최종제출2']);
 
         // 4. Member 3
-        addMember(row['구성사3'], row['사업자등록번호3'], row['지분율3'], 'member', row['카톡담당자3']);
+        addMember(row['구성사3'], row['사업자등록번호3'], row['지분율3'], 'member', row['카톡담당자3'], row['최종제출3']);
 
         // 5. Member 4
-        addMember(row['구성사4'], row['사업자등록번호4'], row['지분율4'], 'member', row['카톡담당자4']);
+        addMember(row['구성사4'], row['사업자등록번호4'], row['지분율4'], 'member', row['카톡담당자4'], row['최종제출4']);
 
         // 6. Member 5 (Assuming keys like '분담사5' based on previous checks, fallback to standard naming if needed)
         // Based on previous logs: '분담사5', '사업자등록번호5', '지분율5'
-        addMember(row['분담사5'], row['사업자등록번호5'], row['지분율5'], 'member', null);
+        addMember(row['분담사5'], row['사업자등록번호5'], row['지분율5'], 'member', null, row['최종제출5']);
 
         // 7. Member 6
-        addMember(row['분담사6'], row['사업자등록번호6'], row['지분율6'], 'member', null);
+        addMember(row['분담사6'], row['사업자등록번호6'], row['지분율6'], 'member', null, row['최종제출6']);
 
 
         return {

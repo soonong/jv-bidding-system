@@ -1,4 +1,3 @@
-
 import React, { useMemo } from 'react';
 
 export const ListView = ({
@@ -53,6 +52,13 @@ export const ListView = ({
         );
     }
 
+    const formatAmount = (amt) => {
+        if (amt === null || amt === undefined || amt === '') return '-';
+        const num = Number(amt);
+        if (isNaN(num)) return amt;
+        return num.toLocaleString();
+    };
+
     return (
         <div className="flex-1 px-6 pb-6 overflow-hidden flex flex-col">
             <div className="bg-white rounded-xl border border-[#e7ebf3] shadow-sm flex flex-col h-full overflow-hidden">
@@ -105,7 +111,7 @@ export const ListView = ({
                                             {project.client}
                                         </td>
                                         <td className="px-4 py-3 text-right text-primary font-mono font-medium">
-                                            {Number(project.amount).toLocaleString()}
+                                            {formatAmount(project.amount)}
                                         </td>
                                         <td className="px-4 py-3 text-center">
                                             {statusBadge}

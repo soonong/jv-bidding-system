@@ -109,9 +109,10 @@ export const fetchBiddingData = async () => {
                         if (name) {
                             const ratio = parseFloat(agreeItem[ratioKey] || "0");
                             // Determine status string
-                            let status = agreeItem[statusKey] || "미제출";
-                            if (status === 'O') status = "제출";
-                            if (status === 'X') status = "미제출";
+                            let rawStatus = agreeItem[statusKey] || "";
+                            let status = 'gray'; // Default unknown
+                            if (rawStatus === 'O' || rawStatus === 'o' || rawStatus === '제출') status = 'o';
+                            else if (rawStatus === 'X' || rawStatus === 'x' || rawStatus === '미제출') status = 'x';
 
                             members.push({
                                 name: name,
@@ -131,9 +132,10 @@ export const fetchBiddingData = async () => {
                         project.representative = repName;
                         if (!members.some(m => m.name === repName)) {
                             const ratio = parseFloat(agreeItem['지분율'] || "0");
-                            let status = agreeItem['최종제출'] || "미제출";
-                            if (status === 'O') status = "제출";
-                            if (status === 'X') status = "미제출";
+                            let rawStatus = agreeItem['최종제출'] || "";
+                            let status = 'gray';
+                            if (rawStatus === 'O' || rawStatus === 'o' || rawStatus === '제출') status = 'o';
+                            else if (rawStatus === 'X' || rawStatus === 'x' || rawStatus === '미제출') status = 'x';
 
                             members.unshift({
                                 name: repName,

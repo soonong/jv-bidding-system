@@ -147,7 +147,7 @@ export const MonthView = ({
                                                     // 3. Amount Rank (Descending)
                                                     const getAmt = (list) => {
                                                         const p = list.find(x => x.amount) || list[0];
-                                                        return parseFloat((p.amount || "0").replace(/[^0-9]/g, '')) || 0;
+                                                        return parseFloat(String(p.amount || "0").replace(/[^0-9]/g, '')) || 0;
                                                     };
                                                     return getAmt(listB) - getAmt(listA);
                                                 })
