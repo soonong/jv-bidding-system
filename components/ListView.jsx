@@ -76,8 +76,8 @@ export const ListView = ({
                                 const count = project._count || 1;
 
                                 // Status logic
-                                const allGreen = project.members.length > 0 && project.members.every((m) => m.submissionStatus === 'o');
-                                const hasRed = project.members.some((m) => m.submissionStatus === 'x');
+                                const allGreen = project.members && project.members.length > 0 && project.members.every((m) => m && m.submissionStatus === 'o');
+                                const hasRed = project.members && project.members.some((m) => m && m.submissionStatus === 'x');
 
                                 let statusBadge = <span className="inline-flex items-center px-2 py-0.5 rounded text-xs font-medium bg-gray-100 text-gray-800">미확인</span>;
                                 if (allGreen) statusBadge = <span className="inline-flex items-center px-2 py-0.5 rounded text-xs font-medium bg-green-100 text-green-800">완료</span>;

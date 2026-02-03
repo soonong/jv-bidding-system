@@ -20,8 +20,8 @@ export const SidebarDetails = ({ project, siblings = [], onClose, onHide }) => {
     // Sort by Status (Green > Red > Gray) then Representative name
     allProposals.sort((a, b) => {
         const getStatusScore = (p) => {
-            const allGreen = p.members.length > 0 && p.members.every(m => m.submissionStatus === 'o');
-            const hasRed = p.members.some(m => m.submissionStatus === 'x');
+            const allGreen = p.members && p.members.length > 0 && p.members.every(m => m && m.submissionStatus === 'o');
+            const hasRed = p.members && p.members.some(m => m && m.submissionStatus === 'x');
             if (allGreen) return 2;
             if (hasRed) return 1;
             return 0;
@@ -75,27 +75,30 @@ export const SidebarDetails = ({ project, siblings = [], onClose, onHide }) => {
         text += `마감 : ${deadlineStr}\n`;
         text += `￣￣￣￣￣￣￣￣￣￣￣￣￣￣\n`;
 
-        selectedProposal.members.forEach(m => {
-            // Format Share
-            let shareStr = m.share;
-            if (m.share) {
-                let val = parseFloat(m.share.toString().replace('%', ''));
-                if (!isNaN(val)) {
-                    if (val <= 1.0) val = val * 100;
-                    shareStr = `${val.toFixed(2)}%`;
+        if (selectedProposal.members) {
+            selectedProposal.members.forEach(m => {
+                if (!m) return;
+                // Format Share
+                let shareStr = m.share;
+                if (m.share) {
+                    let val = parseFloat(m.share.toString().replace('%', ''));
+                    if (!isNaN(val)) {
+                        if (val <= 1.0) val = val * 100;
+                        shareStr = `${val.toFixed(2)}%`;
+                    }
                 }
-            }
-            // Format ID (000-00-00000)
-            let idStr = m.businessNo;
-            const cleanId = (m.businessNo || '').replace(/[^0-9]/g, '');
-            if (cleanId.length === 10) {
-                idStr = `${cleanId.slice(0, 3)}-${cleanId.slice(3, 5)}-${cleanId.slice(5)}`;
-            }
+                // Format ID (000-00-00000)
+                let idStr = m.businessNo;
+                const cleanId = (m.businessNo || '').replace(/[^0-9]/g, '');
+                if (cleanId.length === 10) {
+                    idStr = `${cleanId.slice(0, 3)}-${cleanId.slice(3, 5)}-${cleanId.slice(5)}`;
+                }
 
-            const idPart = (idStr && idStr !== '-') ? `(${idStr})` : '';
+                const idPart = (idStr && idStr !== '-') ? `(${idStr})` : '';
 
-            text += `${m.name}${idPart} ${shareStr}\n`;
-        });
+                text += `${m.name}${idPart} ${shareStr}\n`;
+            });
+        }
 
         text += `￣￣￣￣￣￣￣￣￣￣￣￣￣￣\n`;
         text += `협정서 작성후 톡 부탁드립니다.`;
@@ -174,7 +177,7 @@ export const SidebarDetails = ({ project, siblings = [], onClose, onHide }) => {
                 <div className="h-px bg-gray-200 w-full"></div>
 
                 {/* JV Members */}
-                {selectedProposal.members.length > 0 && (
+                {selectedProposal.members && selectedProposal.members.length > 0 && (
                     <div>
                         <div className="flex items-center justify-between mb-3">
                             <div className="flex items-center gap-2">
@@ -199,8 +202,8 @@ export const SidebarDetails = ({ project, siblings = [], onClose, onHide }) => {
                                     const isSelected = selectedProposal.id === p.id;
 
                                     // Color logic
-                                    const allGreen = p.members.length > 0 && p.members.every(m => m.submissionStatus === 'o');
-                                    const hasRed = p.members.some(m => m.submissionStatus === 'x');
+                                    const allGreen = p.members && p.members.length > 0 && p.members.every(m => m && m.submissionStatus === 'o');
+                                    const hasRed = p.members && p.members.some(m => m && m.submissionStatus === 'x');
 
                                     let colorClass = "bg-gray-50 text-gray-600 border-gray-200 hover:bg-gray-100";
                                     if (allGreen) colorClass = "bg-green-50 text-green-700 border-green-200 hover:bg-green-100";
@@ -237,6 +240,7 @@ export const SidebarDetails = ({ project, siblings = [], onClose, onHide }) => {
                                 </thead>
                                 <tbody className="divide-y divide-[#e7ebf3]">
                                     {selectedProposal.members.map((member, idx) => {
+                                        if (!member) return null;
                                         let formattedId = member.businessNo || '';
                                         const cleanId = formattedId.replace(/[^0-9]/g, '');
                                         if (cleanId.length === 10) {

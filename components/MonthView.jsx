@@ -124,13 +124,13 @@ export const MonthView = ({
 
                                                     // 1. Color Rank (Red 0, Gray 1, Green 2, None 3)
                                                     const getRank = (list) => {
-                                                        const hasMembers = list.some(p => p.members.length > 0);
+                                                        const hasMembers = list.some(p => p.members && p.members.length > 0);
                                                         if (!hasMembers) return 3;
 
-                                                        const hasRed = list.some(p => p.members.some(m => m.submissionStatus === 'x'));
+                                                        const hasRed = list.some(p => p.members && p.members.some(m => m && m.submissionStatus === 'x'));
                                                         if (hasRed) return 0;
 
-                                                        const allGreen = list.every(p => p.members.length > 0 && p.members.every(m => m.submissionStatus === 'o'));
+                                                        const allGreen = list.every(p => p.members && p.members.length > 0 && p.members.every(m => m && m.submissionStatus === 'o'));
                                                         if (allGreen) return 2;
 
                                                         return 1; // Gray
@@ -157,9 +157,9 @@ export const MonthView = ({
                                                     const isSelected = selectedProjectId && group.some((p) => p.id === selectedProjectId);
 
                                                     // Status-based coloring (Group Level)
-                                                    const hasMembers = group.some(p => p.members.length > 0);
-                                                    const hasRed = group.some(p => p.members.some(m => m.submissionStatus === 'x'));
-                                                    const allGreen = hasMembers && group.every(p => p.members.length > 0 && p.members.every(m => m.submissionStatus === 'o'));
+                                                    const hasMembers = group.some(p => p.members && p.members.length > 0);
+                                                    const hasRed = group.some(p => p.members && p.members.some(m => m && m.submissionStatus === 'x'));
+                                                    const allGreen = hasMembers && group.every(p => p.members && p.members.length > 0 && p.members.every(m => m && m.submissionStatus === 'o'));
 
                                                     let color = { bg: 'bg-gray-100', text: 'text-gray-600', border: 'border-gray-400', hover: 'hover:bg-gray-200' };
 
