@@ -29,7 +29,10 @@ export const SidebarDetails = ({ project, siblings = [], onClose, onHide }) => {
         const scoreA = getStatusScore(a);
         const scoreB = getStatusScore(b);
         if (scoreA !== scoreB) return scoreB - scoreA; // High score first
-        return a.representative.localeCompare(b.representative);
+
+        const repA = a.representative || "";
+        const repB = b.representative || "";
+        return repA.localeCompare(repB);
     });
 
     const artistName = selectedProposal.sharedWith && selectedProposal.sharedWith.length > 0 ? selectedProposal.sharedWith[0] : null;
@@ -69,8 +72,9 @@ export const SidebarDetails = ({ project, siblings = [], onClose, onHide }) => {
         const rawAmt = selectedProposal.amount ? String(selectedProposal.amount).replace(/[^0-9]/g, '') : '0';
         const amt = rawAmt ? Number(rawAmt).toLocaleString() : '0';
 
+        const pName = selectedProposal.projectName ? selectedProposal.projectName.replace(/\[협정\]/g, '').trim() : "제목 없음";
         let text = `<${selectedProposal.location || '-'}>\n`;
-        text += `${selectedProposal.projectName.replace(/\[협정\]/g, '').trim()} [${selectedProposal.noticeNumber}]\n`;
+        text += `${pName} [${selectedProposal.noticeNumber}]\n`;
         text += `기초금액 : ${amt}\n`;
         text += `마감 : ${deadlineStr}\n`;
         text += `￣￣￣￣￣￣￣￣￣￣￣￣￣￣\n`;
@@ -147,7 +151,7 @@ export const SidebarDetails = ({ project, siblings = [], onClose, onHide }) => {
                         className="text-xl font-bold text-text-main leading-snug break-keep line-clamp-2 hover:text-blue-600 hover:underline transition-colors cursor-pointer group"
                         title="공고 상세 보기"
                     >
-                        {selectedProposal.projectName.replace(/\[협정\]/g, '').trim()}
+                        {selectedProposal.projectName ? selectedProposal.projectName.replace(/\[협정\]/g, '').trim() : "제목 없음"}
                         <span className="material-symbols-outlined align-middle ml-1 text-lg opacity-0 group-hover:opacity-50 transition-opacity">open_in_new</span>
                     </a>
                 </div>

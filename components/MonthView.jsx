@@ -176,7 +176,7 @@ export const MonthView = ({
                                                     const diff = Math.ceil((date.getTime() - now.getTime()) / (1000 * 60 * 60 * 24));
                                                     const isUrgent = diff <= 3 && diff >= 0;
 
-                                                    const cleanName = mainProject.projectName.replace(/\[협정\]/g, '').trim();
+                                                    const cleanName = mainProject.projectName ? mainProject.projectName.replace(/\[협정\]/g, '').trim() : "제목 없음";
                                                     const countLabel = hasMembers ? `(${group.length})` : '';
 
                                                     return (

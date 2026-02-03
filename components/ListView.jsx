@@ -105,7 +105,7 @@ export const ListView = ({
                                             {project.location || '-'}
                                         </td>
                                         <td className="px-4 py-3 font-bold text-text-main">
-                                            {project.projectName.replace(/\[협정\]/g, '').trim()}
+                                            {project.projectName ? project.projectName.replace(/\[협정\]/g, '').trim() : "제목 없음"}
                                         </td>
                                         <td className="px-4 py-3 text-text-secondary">
                                             {project.client}

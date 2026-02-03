@@ -404,7 +404,7 @@ function Dashboard() {
                         project={selectedProject}
                         siblings={visibleProjects.filter(p =>
                             p.id !== selectedProject.id &&
-                            (p.noticeNumber === selectedProject.noticeNumber && p.noticeNumber !== "")
+                            (p.noticeNumber && p.noticeNumber === selectedProject.noticeNumber)
                         )}
                         onClose={() => setSelectedProject(null)}
                         onHide={handleHideProject}

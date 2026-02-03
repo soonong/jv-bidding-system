@@ -68,8 +68,8 @@ export const WeekView = ({
 
                                 // Sort keys for consistent order (e.g. by Project Name)
                                 const sortedKeys = Object.keys(groupedProjects).sort((a, b) => {
-                                    const nameA = groupedProjects[a][0].projectName;
-                                    const nameB = groupedProjects[b][0].projectName;
+                                    const nameA = groupedProjects[a][0].projectName || "";
+                                    const nameB = groupedProjects[b][0].projectName || "";
                                     return nameA.localeCompare(nameB, 'ko');
                                 });
 
@@ -87,9 +87,9 @@ export const WeekView = ({
                                                 { bg: 'bg-slate-100', text: 'text-slate-600', border: 'border-slate-400', hover: 'hover:bg-slate-200' },
                                                 { bg: 'bg-red-50', text: 'text-red-800', border: 'border-red-500', hover: 'hover:bg-red-100' },
                                             ];
-                                            const color = colors[Math.abs(mainProject.projectName.charCodeAt(0) % colors.length)] || colors[0];
+                                            const color = colors[Math.abs((mainProject.projectName || '').charCodeAt(0) % colors.length)] || colors[0];
 
-                                            const cleanName = mainProject.projectName.replace(/\[협정\]/g, '').trim();
+                                            const cleanName = mainProject.projectName ? mainProject.projectName.replace(/\[협정\]/g, '').trim() : "제목 없음";
                                             const countLabel = group.length > 1 ? `(${group.length})` : '';
 
                                             return (
